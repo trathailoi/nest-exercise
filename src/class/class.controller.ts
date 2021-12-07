@@ -1,6 +1,12 @@
 import {
-  Controller, Get, Post, Body, Patch, Param, Delete
+  Controller,
+  Get, Post, Patch, Delete,
+  Param, Body, HttpCode,
+  ParseUUIDPipe,
+  BadRequestException, NotFoundException
 } from '@nestjs/common'
+import * as Joi from 'joi'
+import { JoiValidationPipe } from '../common/validation.pipe'
 import { ClassService } from './class.service'
 import { CreateClassDto } from './dto/create-class.dto'
 import { UpdateClassDto } from './dto/update-class.dto'
@@ -10,27 +16,72 @@ export class ClassController {
   constructor(private readonly classService: ClassService) {}
 
   @Post()
-  create(@Body() createClassDto: CreateClassDto) {
-    return this.classService.create(createClassDto)
+  @HttpCode(201)
+  async create(@Body(new JoiValidationPipe(Joi.object().keys({
+    name: Joi.string().max(50).required()
+  }))) createClassDto: CreateClassDto) {
+    try {
+      const result = await this.classService.create(createClassDto)
+      return result
+    } catch (error) {
+      throw new BadRequestException(error)
+    }
   }
 
   @Get()
-  findAll() {
-    return this.classService.findAll()
+  async findAll() {
+    try {
+      const result = await this.classService.findAll()
+      return result
+    } catch (error) {
+      throw new BadRequestException(error)
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.classService.findOne(+id)
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
+    let result
+    try {
+      result = await this.classService.findOne(id)
+    } catch (error) {
+      throw new BadRequestException(error)
+    }
+    if (!result) {
+      throw new NotFoundException()
+    }
+    return result
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClassDto: UpdateClassDto) {
-    return this.classService.update(+id, updateClassDto)
+  @HttpCode(204)
+  async update(
+  @Param('id', ParseUUIDPipe) id: string,
+    @Body(new JoiValidationPipe(Joi.object().keys({
+      name: Joi.string().max(50).required()
+    }))) updateClassDto: UpdateClassDto
+  ) {
+    let result
+    try {
+      result = await this.classService.update(id, updateClassDto)
+    } catch (error) {
+      throw new BadRequestException(error)
+    }
+    if (!result.affected) {
+      throw new NotFoundException()
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.classService.remove(+id)
+  @HttpCode(204)
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
+    let result
+    try {
+      result = await this.classService.remove(id)
+    } catch (error) {
+      throw new BadRequestException(error)
+    }
+    if (!result.affected) {
+      throw new NotFoundException()
+    }
   }
 }
