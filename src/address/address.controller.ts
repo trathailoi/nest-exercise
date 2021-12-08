@@ -75,8 +75,8 @@ export class AddressController {
   @Patch(':id/results/:resultId')
   @UsePipes(new JoiValidationPipe({
     param: Joi.object({
-      id: Joi.string().guid().required(),
-      resultId: Joi.string().guid().required()
+      id: Joi.string().guid(),
+      resultId: Joi.string().guid()
     }),
     body: Joi.object({
       name: Joi.string(),
@@ -90,9 +90,9 @@ export class AddressController {
   }))
   @ApiResponse({ status: 204, description: 'No Content' })
   @HttpCode(204)
-  getResult(@Param() params: { id: string, resultId: string }, @Body() updateAddressDto: UpdateAddressDto) {
-    console.log('params.resultId', params.resultId)
-    return this.addressService.update(params.id, updateAddressDto)
+  getResult(@Param('id') id: string, @Param('resultId') resultId: string, @Body() updateAddressDto: UpdateAddressDto) {
+    console.log('resultId', resultId)
+    return this.addressService.update(id, updateAddressDto)
   }
 
   @Delete(':id')
