@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import * as Joi from 'joi'
 
+import { MulterModule } from '@nestjs/platform-express'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
@@ -17,6 +18,11 @@ import { RaceResultModule } from './race-result/race-result.module'
 
 @Module({
   imports: [
+    MulterModule.registerAsync({
+      useFactory: () => ({
+        dest: './upload'
+      })
+    }),
     CarModule,
     DatabaseModule,
     ConfigModule.forRoot({
