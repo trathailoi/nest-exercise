@@ -6,7 +6,7 @@ import * as Joi from 'joi'
 import { AddressService } from './address.service'
 import { CreateAddressDto } from './dto/create-address.dto'
 import { UpdateAddressDto } from './dto/update-address.dto'
-import { JoiValidationPipe } from './validation.pipe'
+import { JoiValidationPipe } from '../common/validation.pipe'
 
 @Controller('address')
 export class AddressController {

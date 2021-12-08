@@ -1,5 +1,5 @@
 export class CreateClassDto {
-  id?: string
+  id: string
 
-  name?: string
+  name: string
 }
