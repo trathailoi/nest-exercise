@@ -25,7 +25,7 @@ import { RaceResultModule } from './race-result/race-result.module'
         POSTGRES_PORT: Joi.number().required(),
         POSTGRES_USER: Joi.string().required(),
         POSTGRES_PASSWORD: Joi.string().required(),
-        POSTGRES_DATABASE: Joi.string().required(),
+        POSTGRES_DB: Joi.string().required(),
         PORT: Joi.number().default(3000),
         NODE_ENV: Joi.string()
           .valid('development', 'production', 'test', 'provision')

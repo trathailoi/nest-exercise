@@ -6,25 +6,25 @@ export class CreateAddressDto implements Readonly<CreateAddressDto> {
     id?: string
 
   @ApiProperty()
-    name?: string
+    name: string
 
   @ApiProperty()
-    street?: string
+    street: string
 
   @ApiProperty()
-    street2?: string
+    street2: string
 
   @ApiProperty()
-    city?: string
+    city: string
 
   @ApiProperty()
-    state?: string
+    state: string
 
   @ApiProperty()
-    zip?: string
+    zip: string
 
   @ApiProperty()
-    country?: string
+    country: string
 
   public static from(dto: Partial<CreateAddressDto>) {
     const it = new CreateAddressDto()

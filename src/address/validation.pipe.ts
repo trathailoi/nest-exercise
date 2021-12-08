@@ -5,12 +5,21 @@ import { ObjectSchema } from 'joi'
 
 @Injectable()
 export class JoiValidationPipe implements PipeTransform {
-  constructor(private schema: ObjectSchema) {}
+  constructor(private mySchema: { param?: ObjectSchema, body?: ObjectSchema, query?: ObjectSchema }) {}
 
   transform(value: any, metadata: ArgumentMetadata) {
-    const { error } = this.schema.validate(value)
+    let inputValue = value
+    if (metadata.type === 'param' && metadata.data) {
+      inputValue = { [metadata.data]: value }
+    }
+    const { error } = this.mySchema[metadata.type].validate(inputValue, { abortEarly: false })
     if (error) {
-      throw new BadRequestException('Validation failed')
+      const reasons = error.details.map((detail: { message: string }) => detail.message).join(', ')
+      throw new BadRequestException(
+        `Request validation of ${metadata.type} ${
+          metadata.data ? `item '${metadata.data}' ` : ''
+        }failed, because: ${reasons}`
+      )
     }
     return value
   }
