@@ -1,8 +1,9 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config()
 
-export class ConfigService {
+export class AppConfig {
   constructor(private env: { [k: string]: string | undefined }) { }
 
   private getValue(key: string, throwOnMissing = true): string {
@@ -35,29 +36,22 @@ export class ConfigService {
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
-
       host: this.getValue('POSTGRES_HOST'),
       port: Number(this.getValue('POSTGRES_PORT')),
       username: this.getValue('POSTGRES_USER'),
       password: this.getValue('POSTGRES_PASSWORD'),
       database: this.getValue('POSTGRES_DB'),
-
       entities: ['**/*.entity{.ts,.js}'],
-
-      // migrationsTableName: 'migration',
-
       migrations: ['src/database/migration/*.ts'],
-
       cli: {
         migrationsDir: 'src/database/migration'
       },
-
       ssl: this.isProduction()
     }
   }
 }
 
-const configService = new ConfigService(process.env)
+const appConfig = new AppConfig(process.env)
   .ensureValues([
     'POSTGRES_HOST',
     'POSTGRES_PORT',
@@ -66,4 +60,4 @@ const configService = new ConfigService(process.env)
     'POSTGRES_DB'
   ])
 
-export { configService }
+export { appConfig }

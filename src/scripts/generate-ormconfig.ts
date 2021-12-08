@@ -1,7 +1,7 @@
 import fs = require('fs')
-import { configService } from '../config'
+import { appConfig } from '../app.config'
 
 fs.writeFileSync(
   'ormconfig.json',
-  JSON.stringify(configService.getTypeOrmConfig(), null, 2)
+  JSON.stringify(appConfig.getTypeOrmConfig(), null, 2)
 )

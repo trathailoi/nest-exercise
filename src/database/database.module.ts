@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { getConnectionOptions } from 'typeorm'
 import DatabaseLogger from './databaseLogger'
 
 @Module({
@@ -8,22 +9,13 @@ import DatabaseLogger from './databaseLogger'
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+      useFactory: async (configService: ConfigService) => Object.assign(await getConnectionOptions(), {
         logger: new DatabaseLogger(),
-        host: configService.get('POSTGRES_HOST'),
-        port: configService.get('POSTGRES_PORT'),
-        username: configService.get('POSTGRES_USER'),
-        password: configService.get('POSTGRES_PASSWORD'),
-        database: configService.get('POSTGRES_DB'),
         entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
         autoLoadEntities: true,
         synchronize: false, // NOTE: should be 'false' to avoid data loss, and to make the migrations work
         migrationsRun: Boolean(configService.get('RUN_MIGRATIONS') === 'true'), // automatically run migrations
-        migrations: [`${__dirname}/migration/*.{ts,js}`],
-        cli: {
-          migrationsDir: 'src/database/migration'
-        }
+        migrations: [`${__dirname}/migration/*.{ts,js}`]
       })
     })
   ]
