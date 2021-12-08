@@ -1,37 +1,43 @@
 import {
-  Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, HttpCode
+  Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, HttpCode, Inject
 } from '@nestjs/common'
 import {
   ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse, ApiTags,
   ApiQuery, ApiBody
 } from '@nestjs/swagger'
 import * as Joi from 'joi'
+import { Address } from './entities/address.entity'
 import { AddressService } from './address.service'
 import { CreateAddressDto } from './dto/create-address.dto'
 import { UpdateAddressDto } from './dto/update-address.dto'
 import { JoiValidationPipe } from '../common/validation.pipe'
 
+import type { Mapper } from '../common/mapper'
+
 @ApiTags('addresses')
 @Controller('addresses')
 export class AddressController {
-  constructor(private readonly addressService: AddressService) {}
+  constructor(
+    private readonly addressService: AddressService,
+    @Inject('MAPPER') private readonly mapper: Mapper
+  ) {}
 
   @Post()
   @UsePipes(new JoiValidationPipe({
     body: Joi.object({
-      name: Joi.string().max(150).required().example('John Doe'),
-      street: Joi.string().allow(null, '').example('123 Main St'),
-      street2: Joi.string().allow(null, '').example('Apt. 1'),
-      city: Joi.string().required().example('Anytown'),
-      state: Joi.string().required().example('CA'),
-      zip: Joi.string().required().example('12345'),
-      country: Joi.string().required().example('US')
+      name: Joi.string().max(150).required(),
+      street: Joi.string().allow(null, ''),
+      street2: Joi.string().allow(null, ''),
+      city: Joi.string().required(),
+      state: Joi.string().required(),
+      zip: Joi.string().required(),
+      country: Joi.string().required()
     })
   }))
   @ApiCreatedResponse({ description: 'The record has been successfully created.' })
   @ApiBadRequestResponse({ description: 'Bad Request.' })
   create(@Body() createAddressDto: CreateAddressDto) {
-    return this.addressService.create(createAddressDto)
+    return this.addressService.save(this.mapper.map(CreateAddressDto, Address, createAddressDto))
   }
 
   @Get()
@@ -116,7 +122,7 @@ export class AddressController {
   @ApiNoContentResponse({ description: 'The address has been updated' })
   @HttpCode(204)
   update(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
-    return this.addressService.update(id, updateAddressDto)
+    return this.addressService.save(this.mapper.map(UpdateAddressDto, Address, { ...updateAddressDto, id }))
   }
 
   @Patch(':id/results/:resultId')
@@ -140,7 +146,7 @@ export class AddressController {
   @HttpCode(204)
   getResult(@Param('id') id: string, @Param('resultId') resultId: string, @Body() updateAddressDto: UpdateAddressDto) {
     console.log('resultId', resultId)
-    return this.addressService.update(id, updateAddressDto)
+    return this.addressService.save(this.mapper.map(UpdateAddressDto, Address, { ...updateAddressDto, id }))
   }
 
   @Delete(':id')
@@ -154,6 +160,6 @@ export class AddressController {
   @ApiNoContentResponse({ description: 'The address has been deleted' })
   @HttpCode(204)
   remove(@Param('id') id: string) {
-    return this.addressService.remove(id)
+    return this.addressService.delete(id)
   }
 }

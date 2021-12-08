@@ -7,6 +7,7 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
 import { DatabaseModule } from './database/database.module'
+import { LoggerModule } from './logger/logger.module'
 
 import { CarModule } from './app/car/car.module'
 import { AddressModule } from './app/address/address.module'
@@ -18,13 +19,8 @@ import { RaceResultModule } from './app/race-result/race-result.module'
 
 @Module({
   imports: [
-    MulterModule.registerAsync({
-      useFactory: () => ({
-        dest: './upload'
-      })
-    }),
-    CarModule,
     DatabaseModule,
+    LoggerModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         POSTGRES_HOST: Joi.string().required(),
@@ -38,6 +34,12 @@ import { RaceResultModule } from './app/race-result/race-result.module'
           .default('development')
       })
     }),
+    MulterModule.registerAsync({
+      useFactory: () => ({
+        dest: './upload'
+      })
+    }),
+    CarModule,
     AddressModule,
     ClassModule,
     DriverModule,
