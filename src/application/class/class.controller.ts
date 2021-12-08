@@ -6,6 +6,7 @@ import {
   UsePipes,
   BadRequestException, NotFoundException, UploadedFile, UseInterceptors, Req, Version
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 import * as Joi from 'joi'
 import { diskStorage } from 'multer'
@@ -16,7 +17,8 @@ import { ClassService } from './class.service'
 import { CreateClassDto } from './dto/create-class.dto'
 import { UpdateClassDto } from './dto/update-class.dto'
 
-@Controller('class')
+@ApiTags('classes')
+@Controller('classes')
 export class ClassController {
   constructor(private readonly classService: ClassService) {}
 

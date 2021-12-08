@@ -1,41 +1,70 @@
 import {
   Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, HttpCode
 } from '@nestjs/common'
-import { ApiResponse } from '@nestjs/swagger'
+import {
+  ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse, ApiTags,
+  ApiQuery, ApiBody
+} from '@nestjs/swagger'
 import * as Joi from 'joi'
 import { AddressService } from './address.service'
 import { CreateAddressDto } from './dto/create-address.dto'
 import { UpdateAddressDto } from './dto/update-address.dto'
 import { JoiValidationPipe } from '../common/validation.pipe'
 
-@Controller('address')
+@ApiTags('addresses')
+@Controller('addresses')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
   @Post()
   @UsePipes(new JoiValidationPipe({
     body: Joi.object({
-      name: Joi.string().required(),
-      street: Joi.string().allow(null, ''),
-      street2: Joi.string().allow(null, ''),
-      city: Joi.string().required(),
-      state: Joi.string().required(),
-      zip: Joi.string().required(),
-      country: Joi.string().required()
+      name: Joi.string().max(150).required().example('John Doe'),
+      street: Joi.string().allow(null, '').example('123 Main St'),
+      street2: Joi.string().allow(null, '').example('Apt. 1'),
+      city: Joi.string().required().example('Anytown'),
+      state: Joi.string().required().example('CA'),
+      zip: Joi.string().required().example('12345'),
+      country: Joi.string().required().example('US')
     })
   }))
+  @ApiCreatedResponse({ description: 'The record has been successfully created.' })
+  @ApiBadRequestResponse({ description: 'Bad Request.' })
   create(@Body() createAddressDto: CreateAddressDto) {
     return this.addressService.create(createAddressDto)
   }
 
   @Get()
   @UsePipes(new JoiValidationPipe({
-    query: Joi.object({ // NOTE: not the final solution, just a quick test
+    query: Joi.object({
       pageSize: Joi.number().integer().min(1).max(50)
         .default(10),
       currentPage: Joi.number().integer().min(1).default(1)
     })
   }))
+  @ApiQuery({
+    name: 'pageSize', required: false, schema: { minimum: 1, maximum: 50 }, description: 'Page size.'
+  })
+  @ApiQuery({
+    name: 'currentPage', required: false, schema: { minimum: 1 }, description: 'Current page.'
+  })
+  @ApiOkResponse({
+    isArray: true,
+    schema: {
+      type: 'array',
+      items: {
+        properties: {
+          count: { type: 'number' },
+          data: {
+            type: 'array',
+            items: {
+              type: 'object'
+            }
+          }
+        }
+      }
+    }
+  })
   findAll(@Query() query: any) { // TODO: clarify query param, avoid using "any"
     console.log('query', query)
     return this.addressService.findAll({
@@ -47,6 +76,8 @@ export class AddressController {
   }
 
   @Get(':id')
+  @ApiNotFoundResponse({ description: 'Not found.' })
+  @ApiOkResponse()
   findOne(@Param('id') id: string) {
     return this.addressService.findOne(id)
   }
@@ -66,7 +97,23 @@ export class AddressController {
       country: Joi.string()
     })
   }))
-  @ApiResponse({ status: 204, description: 'No Content' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', example: 'John Doe' },
+        street: { type: 'string', example: '123 Main St.' },
+        street2: { type: 'string', example: 'Apt. 1' },
+        city: { type: 'string', example: 'Anytown' },
+        state: { type: 'string', example: 'CA' },
+        zip: { type: 'string', example: '12345' },
+        country: { type: 'string', example: 'USA' }
+      }
+    }
+  })
+  @ApiBadRequestResponse({ description: 'The request is not valid.' })
+  @ApiNotFoundResponse({ description: 'Not found.' })
+  @ApiNoContentResponse({ description: 'The address has been updated' })
   @HttpCode(204)
   update(@Param('id') id: string, @Body() updateAddressDto: UpdateAddressDto) {
     return this.addressService.update(id, updateAddressDto)
@@ -88,7 +135,8 @@ export class AddressController {
       country: Joi.string()
     })
   }))
-  @ApiResponse({ status: 204, description: 'No Content' })
+  @ApiNoContentResponse()
+  @ApiNotFoundResponse({ description: 'Not found.' })
   @HttpCode(204)
   getResult(@Param('id') id: string, @Param('resultId') resultId: string, @Body() updateAddressDto: UpdateAddressDto) {
     console.log('resultId', resultId)
@@ -101,7 +149,9 @@ export class AddressController {
       id: Joi.string().guid().required()
     })
   }))
-  @ApiResponse({ status: 204, description: 'No Content' })
+  @ApiBadRequestResponse({ description: 'The request is not valid.' })
+  @ApiNotFoundResponse({ description: 'Not found.' })
+  @ApiNoContentResponse({ description: 'The address has been deleted' })
   @HttpCode(204)
   remove(@Param('id') id: string) {
     return this.addressService.remove(id)

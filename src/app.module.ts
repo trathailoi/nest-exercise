@@ -8,13 +8,13 @@ import { AppService } from './app.service'
 
 import { DatabaseModule } from './database/database.module'
 
-import { CarModule } from './car/car.module'
-import { AddressModule } from './address/address.module'
-import { ClassModule } from './class/class.module'
-import { DriverModule } from './driver/driver.module'
-import { RaceModule } from './race/race.module'
-import { TeamModule } from './team/team.module'
-import { RaceResultModule } from './race-result/race-result.module'
+import { CarModule } from './application/car/car.module'
+import { AddressModule } from './application/address/address.module'
+import { ClassModule } from './application/class/class.module'
+import { DriverModule } from './application/driver/driver.module'
+import { RaceModule } from './application/race/race.module'
+import { TeamModule } from './application/team/team.module'
+import { RaceResultModule } from './application/race-result/race-result.module'
 
 @Module({
   imports: [

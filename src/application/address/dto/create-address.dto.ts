@@ -5,25 +5,25 @@ export class CreateAddressDto implements Readonly<CreateAddressDto> {
   @ApiProperty()
     id?: string
 
-  @ApiProperty()
+  @ApiProperty({ example: 'John Doe' })
     name: string
 
-  @ApiProperty()
+  @ApiProperty({ example: '123 Main St' })
     street: string
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Apt. 1' })
     street2: string
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Anytown' })
     city: string
 
-  @ApiProperty()
+  @ApiProperty({ example: 'CA' })
     state: string
 
-  @ApiProperty()
+  @ApiProperty({ example: '12345' })
     zip: string
 
-  @ApiProperty()
+  @ApiProperty({ example: 'United States' })
     country: string
 
   public static from(dto: Partial<CreateAddressDto>) {

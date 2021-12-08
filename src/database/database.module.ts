@@ -17,8 +17,13 @@ import DatabaseLogger from './databaseLogger'
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
         entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
-        synchronize: true,
-        autoLoadEntities: true
+        autoLoadEntities: true,
+        synchronize: false, // NOTE: should be 'false' to avoid data loss, and to make the migrations work
+        migrationsRun: Boolean(configService.get('RUN_MIGRATIONS') === 'true'), // automatically run migrations
+        migrations: [`${__dirname}/migration/*.{ts,js}`],
+        cli: {
+          migrationsDir: 'src/database/migration'
+        }
       })
     })
   ]
