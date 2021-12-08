@@ -3,7 +3,7 @@ import {
   Get, Post, Patch, Delete,
   Param, Body, HttpCode,
   ParseUUIDPipe,
-  BadRequestException, NotFoundException, UploadedFile, UseInterceptors, Req
+  BadRequestException, NotFoundException, UploadedFile, UseInterceptors, Req, Version
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import * as Joi from 'joi'
@@ -91,6 +91,7 @@ export class ClassController {
 
   // eslint-disable-next-line class-methods-use-this
   @Post('upload')
+  @Version(['1', '2'])
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: './uploads',
