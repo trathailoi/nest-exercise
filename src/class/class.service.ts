@@ -17,12 +17,14 @@ export class ClassService {
     return this.repository.insert(createClassDto)
   }
 
-  findAll(): Promise<Array<Class>> {
-    return this.repository.find()
+  async findAll(): Promise<Array<Class>> {
+    const result = await this.repository.find()
+    return result
   }
 
-  findOne(id: string): Promise<Class> {
-    return this.repository.findOne(id)
+  async findOne(id: string): Promise<Class> {
+    const result = await this.repository.findOne(id)
+    return result
   }
 
   update(id: string, updateClassDto: UpdateClassDto): Promise<UpdateResult> {
