@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { APP_GUARD } from '@nestjs/core'
 import { ConfigModule } from '@nestjs/config'
 import * as Joi from 'joi'
 
@@ -15,16 +16,12 @@ import { DriverModule } from './driver/driver.module'
 import { RaceModule } from './race/race.module'
 import { TeamModule } from './team/team.module'
 import { RaceResultModule } from './race-result/race-result.module'
+import { UserModule } from './user/user.module'
+import { AuthModule } from './auth/auth.module'
+import { JwtAuthGuard } from './auth/jwt-auth.guard'
 
 @Module({
   imports: [
-    MulterModule.registerAsync({
-      useFactory: () => ({
-        dest: './upload'
-      })
-    }),
-    CarModule,
-    DatabaseModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         POSTGRES_HOST: Joi.string().required(),
@@ -35,15 +32,22 @@ import { RaceResultModule } from './race-result/race-result.module'
         PORT: Joi.number().default(3000),
         NODE_ENV: Joi.string()
           .valid('development', 'production', 'test', 'provision')
-          .default('development')
+          .default('development'),
+        JWT_SECRET: Joi.string().required()
       })
     }),
+    MulterModule.register(),
+    DatabaseModule,
+
+    CarModule,
     AddressModule,
     ClassModule,
     DriverModule,
     RaceModule,
     TeamModule,
-    RaceResultModule
+    RaceResultModule,
+    UserModule,
+    AuthModule
     // AutomapperModule.forRoot({
     //   options: [{
     //     name: 'classMapper',
@@ -54,6 +58,12 @@ import { RaceResultModule } from './race-result/race-result.module'
     // })
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard
+    }
+  ]
 })
 export class AppModule {}
