@@ -17,9 +17,9 @@ import { DriverModule } from './app/driver/driver.module'
 import { RaceModule } from './app/race/race.module'
 import { TeamModule } from './app/team/team.module'
 import { RaceResultModule } from './app/race-result/race-result.module'
-import { AuthModule } from './app/auth/auth.module'
 import { UserModule } from './app/user/user.module'
-import { JwtAuthGuard } from './app/auth/jwt-auth.guard'
+import { AuthModule } from './auth/auth.module'
+import { JwtAuthGuard } from './auth/jwt-auth.guard'
 
 @Module({
   imports: [
@@ -38,11 +38,7 @@ import { JwtAuthGuard } from './app/auth/jwt-auth.guard'
           .default('development')
       })
     }),
-    MulterModule.registerAsync({
-      useFactory: () => ({
-        dest: './upload'
-      })
-    }),
+    MulterModule.register(),
     CarModule,
     AddressModule,
     ClassModule,
