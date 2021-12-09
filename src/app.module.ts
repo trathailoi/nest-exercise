@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import * as Joi from 'joi'
 
 import { MulterModule } from '@nestjs/platform-express'
+import { APP_GUARD } from '@nestjs/core'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
@@ -16,6 +17,9 @@ import { DriverModule } from './app/driver/driver.module'
 import { RaceModule } from './app/race/race.module'
 import { TeamModule } from './app/team/team.module'
 import { RaceResultModule } from './app/race-result/race-result.module'
+import { AuthModule } from './app/auth/auth.module'
+import { UserModule } from './app/user/user.module'
+import { JwtAuthGuard } from './app/auth/jwt-auth.guard'
 
 @Module({
   imports: [
@@ -45,7 +49,9 @@ import { RaceResultModule } from './app/race-result/race-result.module'
     DriverModule,
     RaceModule,
     TeamModule,
-    RaceResultModule
+    RaceResultModule,
+    AuthModule,
+    UserModule
     // AutomapperModule.forRoot({
     //   options: [{
     //     name: 'classMapper',
@@ -56,6 +62,12 @@ import { RaceResultModule } from './app/race-result/race-result.module'
     // })
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard
+    }
+  ]
 })
 export class AppModule {}
