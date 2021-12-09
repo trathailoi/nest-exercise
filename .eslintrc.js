@@ -20,7 +20,7 @@ module.exports = {
     'airbnb-base',
     'airbnb-typescript/base'
   ],
-  ignorePatterns: ['.eslintrc.js', 'node_modules/', 'dist/'],
+  ignorePatterns: ['.eslintrc.js', 'node_modules/', 'dist/', 'database/migration/*'],
   rules: {
     '@typescript-eslint/comma-dangle': ['error', 'never'],
     '@typescript-eslint/semi': ['error', 'never'],
