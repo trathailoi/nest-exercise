@@ -4,6 +4,9 @@ import { Address } from '../address/entities/address.entity'
 import { CreateAddressDto } from '../address/dto/create-address.dto'
 import { UpdateAddressDto } from '../address/dto/update-address.dto'
 
+import { User } from '../user/entities/user.entity'
+import { CreateUserDto } from '../user/dto/create-user.dto'
+
 // import { Class } from './class/entities/class.entity'
 // import { ClassModel } from './class/dto/class.dto'
 
@@ -69,6 +72,11 @@ class Mapper {
       UpdateAddressDto,
       Address,
       ['id', 'name', 'street', 'street2', 'city', 'state', 'zip', 'country']
+    )
+    this.createDefaultBiDiMap(
+      CreateUserDto,
+      User,
+      ['id', 'email', 'firstName', 'lastName', 'password']
     )
     // this.createDefaultBiDiMap(
     //     ClassModel,
