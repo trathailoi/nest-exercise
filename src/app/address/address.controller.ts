@@ -71,12 +71,11 @@ export class AddressController {
       }
     }
   })
-  findAll(@Query() query: any) { // TODO: clarify query param, avoid using "any"
-    console.log('query', query)
+  findAll(@Query('pageSize') pageSize: number, @Query('currentPage') currentPage: number) {
     return this.addressService.findAll({
       pagination: {
-        pageSize: query.pageSize,
-        currentPage: query.currentPage
+        pageSize,
+        currentPage
       }
     })
   }
@@ -125,29 +124,29 @@ export class AddressController {
     return this.addressService.save(this.mapper.map(UpdateAddressDto, Address, { ...updateAddressDto, id }))
   }
 
-  @Patch(':id/results/:resultId')
-  @UsePipes(new JoiValidationPipe({
-    param: Joi.object({
-      id: Joi.string().guid(),
-      resultId: Joi.string().guid()
-    }),
-    body: Joi.object({
-      name: Joi.string(),
-      street: Joi.string().allow(null, ''),
-      street2: Joi.string().allow(null, ''),
-      city: Joi.string(),
-      state: Joi.string(),
-      zip: Joi.string(),
-      country: Joi.string()
-    })
-  }))
-  @ApiNoContentResponse()
-  @ApiNotFoundResponse({ description: 'Not found.' })
-  @HttpCode(204)
-  getResult(@Param('id') id: string, @Param('resultId') resultId: string, @Body() updateAddressDto: UpdateAddressDto) {
-    console.log('resultId', resultId)
-    return this.addressService.save(this.mapper.map(UpdateAddressDto, Address, { ...updateAddressDto, id }))
-  }
+  // @Patch(':id/results/:resultId')
+  // @UsePipes(new JoiValidationPipe({
+  //   param: Joi.object({
+  //     id: Joi.string().guid(),
+  //     resultId: Joi.string().guid()
+  //   }),
+  //   body: Joi.object({
+  //     name: Joi.string(),
+  //     street: Joi.string().allow(null, ''),
+  //     street2: Joi.string().allow(null, ''),
+  //     city: Joi.string(),
+  //     state: Joi.string(),
+  //     zip: Joi.string(),
+  //     country: Joi.string()
+  //   })
+  // }))
+  // @ApiNoContentResponse()
+  // @ApiNotFoundResponse({ description: 'Not found.' })
+  // @HttpCode(204)
+  // getResult(@Param('id') id: string, @Param('resultId') resultId: string, @Body() updateAddressDto: UpdateAddressDto) {
+  //   console.log('resultId', resultId)
+  //   return this.addressService.save(this.mapper.map(UpdateAddressDto, Address, { ...updateAddressDto, id }))
+  // }
 
   @Delete(':id')
   @UsePipes(new JoiValidationPipe({

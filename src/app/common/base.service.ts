@@ -45,7 +45,7 @@ export class BaseService<T> {
       //     }
       // })
     }
-    console.log('queryObj', queryObj)
+    this.logger.debug(JSON.stringify(queryObj, null, 2), 'findAll - queryObj')
     const result = await this.repository.findAndCount(queryObj)
     return {
       data: result[0],

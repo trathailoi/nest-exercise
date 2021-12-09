@@ -9,7 +9,7 @@ export class JoiValidationPipe implements PipeTransform {
 
   transform(value: any, metadata: ArgumentMetadata) {
     let inputValue = value
-    if (metadata.type === 'param' && metadata.data) {
+    if (metadata.data) {
       inputValue = { [metadata.data]: value }
     }
     const { error } = this.mySchema[metadata.type].validate(inputValue, { abortEarly: false })
