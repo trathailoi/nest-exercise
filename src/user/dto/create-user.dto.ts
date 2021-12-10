@@ -1,11 +1,17 @@
+import { ApiProperty } from '@nestjs/swagger'
+
 export class CreateUserDto implements Readonly<CreateUserDto> {
   id: string
 
-  email: string
+  @ApiProperty()
+    email: string
 
-  firstName: string
+  @ApiProperty()
+    firstName: string
 
-  lastName: string
+  @ApiProperty()
+    lastName: string
 
-  password: string
+  @ApiProperty()
+    password: string
 }

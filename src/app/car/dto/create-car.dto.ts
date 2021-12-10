@@ -1,15 +1,23 @@
+import { ApiProperty } from '@nestjs/swagger'
+
 export class CreateCarDto {
   id?: string
 
-  name?: string
+  @ApiProperty()
+    name?: string
 
-  make?: string
+  @ApiProperty()
+    make?: string
 
-  model?: string
+  @ApiProperty()
+    model?: string
 
-  class?: string
+  @ApiProperty()
+    class?: string
 
-  team?: string
+  @ApiProperty()
+    team?: string
 
-  results?: string[]
+  @ApiProperty()
+    results?: string[]
 }

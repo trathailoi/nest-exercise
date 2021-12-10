@@ -8,7 +8,7 @@ import {
   Inject
 } from '@nestjs/common'
 import {
-  ApiTags,
+  ApiTags, ApiBearerAuth,
   ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse, ApiUnauthorizedResponse
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
@@ -25,6 +25,7 @@ import { UpdateClassDto } from './dto/update-class.dto'
 import { Class } from './class.entity'
 
 @ApiTags('classes')
+@ApiBearerAuth()
 @ApiUnauthorizedResponse({
   schema: {
     type: 'object',

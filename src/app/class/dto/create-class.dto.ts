@@ -1,5 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger'
+
 export class CreateClassDto {
   id: string
 
-  name: string
+  @ApiProperty()
+    name: string
 }

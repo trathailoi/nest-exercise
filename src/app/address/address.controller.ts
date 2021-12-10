@@ -2,7 +2,7 @@ import {
   Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, HttpCode, Inject, Req, HttpStatus
 } from '@nestjs/common'
 import {
-  ApiTags, ApiQuery, ApiBody,
+  ApiTags, ApiQuery, ApiBody, ApiBearerAuth,
   ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse, ApiUnauthorizedResponse
 } from '@nestjs/swagger'
 import * as Joi from 'joi'
@@ -15,6 +15,7 @@ import { JoiValidationPipe } from '../common/validation.pipe'
 import type { Mapper } from '../common/mapper'
 
 @ApiTags('addresses')
+@ApiBearerAuth()
 @ApiUnauthorizedResponse({
   schema: {
     type: 'object',

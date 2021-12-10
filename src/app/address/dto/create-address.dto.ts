@@ -2,8 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { Address } from '../address.entity'
 
 export class CreateAddressDto implements Readonly<CreateAddressDto> {
-  @ApiProperty()
-    id?: string
+  id: string
 
   @ApiProperty({ example: 'John Doe' })
     name: string
