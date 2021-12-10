@@ -5,8 +5,8 @@ import { Exclude, Expose } from 'class-transformer'
 
 @Entity()
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
-    id: number
+  @PrimaryGeneratedColumn('uuid')
+    id!: string
 
   @Unique(['email'])
   @Column()
@@ -25,17 +25,34 @@ export class User extends BaseEntity {
   @Column({ default: true })
     isActive: boolean
 
+  // @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   @CreateDateColumn({
-    default: 'now()',
-    nullable: true
+    type: 'timestamptz',
+    default: 'now()'
+    // nullable: true
   })
-    createdAt: string
+    createdAt?: Date
 
+  // @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   @UpdateDateColumn({
-    default: 'now()',
-    nullable: true
+    type: 'timestamptz',
+    default: 'now()'
+    // nullable: true
   })
-    updatedAt: string
+    modifiedAt?: Date
+
+  // @CreateDateColumn({
+  //   default: 'now()',
+  //   update: false,
+  //   nullable: true
+  // })
+  //   createdAt: string
+
+  // @UpdateDateColumn({
+  //   default: 'now()',
+  //   nullable: true
+  // })
+  //   updatedAt: string
 
   constructor(partial: Partial<User>) {
     super()

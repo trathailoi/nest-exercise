@@ -1,6 +1,9 @@
-import { DeleteResult, Repository } from 'typeorm'
+import {
+  InsertResult, UpdateResult, DeleteResult, Repository
+} from 'typeorm'
 import { EntityId } from 'typeorm/repository/EntityId'
 import { LoggerService } from '../../logger/custom.logger'
+import { User } from '../../user/user.entity'
 
 export class BaseService<T> {
   protected readonly repository: Repository<T>
@@ -12,8 +15,13 @@ export class BaseService<T> {
     this.logger = logger
   }
 
-  async save(entity: T): Promise<T | undefined> {
-    return this.repository.save(entity)
+  create(entity: T | Array<T>, createdBy: User): Promise<InsertResult> {
+    const entities = Array.isArray(entity) ? entity : [entity]
+    return this.repository.insert(entities.map((e: T) => ({ ...e, createdBy })))
+  }
+
+  update(id: EntityId, entity: T, modifiedBy: User): Promise<UpdateResult> {
+    return this.repository.update(id, { ...entity, modifiedBy })
   }
 
   async findAll(queryObject?: { where?, relations?: string[], pagination?: { pageSize?: number, currentPage?: number }, order? }): Promise<{ data: Array<T>, count: number }> {
@@ -61,11 +69,7 @@ export class BaseService<T> {
     return this.repository.findByIds(ids)
   }
 
-  async saveMany(entities: Array<T>): Promise<Array<T>> {
-    return this.repository.save(entities)
-  }
-
-  async delete(id: EntityId): Promise<DeleteResult> {
+  delete(id: EntityId): Promise<DeleteResult> {
     return this.repository.delete(id)
   }
 }

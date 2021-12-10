@@ -1,10 +1,10 @@
 import {
   Column, Entity, PrimaryGeneratedColumn, ManyToOne, ManyToMany, OneToMany
 } from 'typeorm'
-import { Address } from '../../address/entities/address.entity'
-import { Team } from '../../team/entities/team.entity'
-import { RaceResult } from '../../race-result/entities/race-result.entity'
-import { BaseEntity } from '../../common/base.entity'
+import { Address } from '../address/address.entity'
+import { Team } from '../team/team.entity'
+import { RaceResult } from '../race-result/race-result.entity'
+import { BaseEntity } from '../common/base.entity'
 
 enum Nationality {
   USA = 'USA',

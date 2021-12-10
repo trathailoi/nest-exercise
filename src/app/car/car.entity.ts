@@ -1,10 +1,10 @@
 import {
   Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany
 } from 'typeorm'
-import { Class } from '../../class/entities/class.entity'
-import { Team } from '../../team/entities/team.entity'
-import { RaceResult } from '../../race-result/entities/race-result.entity'
-import { BaseEntity } from '../../common/base.entity'
+import { Class } from '../class/class.entity'
+import { Team } from '../team/team.entity'
+import { RaceResult } from '../race-result/race-result.entity'
+import { BaseEntity } from '../common/base.entity'
 
 @Entity()
 export class Car extends BaseEntity {

@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm'
-import { Class } from './entities/class.entity'
+import { Class } from './class.entity'
 import { ClassService } from './class.service'
 
 describe('Class Service', () => {

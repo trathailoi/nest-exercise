@@ -4,35 +4,53 @@ import {
   Param, Body, HttpCode,
   ParseUUIDPipe,
   UsePipes,
-  BadRequestException, NotFoundException, UploadedFile, UseInterceptors, Req, Version
+  HttpStatus, BadRequestException, NotFoundException, UploadedFile, UseInterceptors, Req, Version,
+  Inject
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import {
+  ApiTags,
+  ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse, ApiUnauthorizedResponse
+} from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 import * as Joi from 'joi'
 import { diskStorage } from 'multer'
-
 import * as path from 'path'
+
+import type { Mapper } from '../common/mapper'
 import { JoiValidationPipe } from '../common/validation.pipe'
+
 import { ClassService } from './class.service'
 import { CreateClassDto } from './dto/create-class.dto'
 import { UpdateClassDto } from './dto/update-class.dto'
+import { Class } from './class.entity'
 
 @ApiTags('classes')
+@ApiUnauthorizedResponse({
+  schema: {
+    type: 'object',
+    properties: {
+      statusCode: { type: 'number', example: 401 },
+      message: { type: 'string', example: 'Unauthorized' }
+    }
+  }
+})
 @Controller('classes')
 export class ClassController {
-  constructor(private readonly classService: ClassService) {}
+  constructor(private readonly classService: ClassService, @Inject('MAPPER') private readonly mapper: Mapper) {}
 
   @Post()
+  @ApiCreatedResponse()
+  @ApiBadRequestResponse()
   @UsePipes(new JoiValidationPipe({
     body: Joi.object({
       name: Joi.string().max(50).required()
     })
   }))
-  @HttpCode(201)
-  async create(@Body() createClassDto: CreateClassDto) {
+  // @HttpCode(HttpStatus.CREATED) // by default
+  async create(@Body() createClassDto: CreateClassDto, @Req() req) {
     try {
-      const result = await this.classService.create(createClassDto)
-      return result
+      const result = await this.classService.create(this.mapper.map(CreateClassDto, Class, createClassDto), req.user)
+      return result.identifiers[0]
     } catch (error) {
       throw new BadRequestException(error)
     }
@@ -49,6 +67,8 @@ export class ClassController {
   }
 
   @Get(':id')
+  @ApiNotFoundResponse()
+  @ApiOkResponse()
   @UsePipes(new JoiValidationPipe({
     param: Joi.object({
       id: Joi.string().guid().required()
@@ -68,6 +88,9 @@ export class ClassController {
   }
 
   @Patch(':id')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiNoContentResponse()
   @UsePipes(new JoiValidationPipe({
     param: Joi.object({
       id: Joi.string().guid().required()
@@ -76,35 +99,33 @@ export class ClassController {
       name: Joi.string().max(50).required()
     })
   }))
-  @HttpCode(204)
-  async update(@Param('id') id: string, @Body() updateClassDto: UpdateClassDto) {
-    let result
-    try {
-      result = await this.classService.update(id, updateClassDto)
-    } catch (error) {
-      throw new BadRequestException(error)
-    }
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async update(@Param('id') id: string, @Body() updateClassDto: UpdateClassDto, @Req() req) {
+    const result = await this.classService.update(id, this.mapper.map(UpdateClassDto, Class, updateClassDto), req.user)
     if (!result.affected) {
       throw new NotFoundException()
     }
   }
 
   @Delete(':id')
+  @ApiBadRequestResponse()
+  @ApiNotFoundResponse()
+  @ApiNoContentResponse()
   @UsePipes(new JoiValidationPipe({
     param: Joi.object({
       id: Joi.string().guid().required()
     })
   }))
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
-    let result
     try {
-      result = await this.classService.remove(id)
+      const result = await this.classService.delete(id)
+      if (!result.affected) {
+        return new NotFoundException()
+      }
+      return result
     } catch (error) {
-      throw new BadRequestException(error)
-    }
-    if (!result.affected) {
-      throw new NotFoundException()
+      return new BadRequestException(error)
     }
   }
 

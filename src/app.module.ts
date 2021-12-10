@@ -1,25 +1,28 @@
-import { Module } from '@nestjs/common'
+import { Module, MiddlewareConsumer } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import * as Joi from 'joi'
-
 import { MulterModule } from '@nestjs/platform-express'
+
 import { APP_GUARD } from '@nestjs/core'
+
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
 import { DatabaseModule } from './database/database.module'
 import { LoggerModule } from './logger/logger.module'
+import LogsMiddleware from './utils/logs.middleware'
 
-import { CarModule } from './app/car/car.module'
+import { UserModule } from './user/user.module'
+import { AuthModule } from './auth/auth.module'
+import { JwtAuthGuard } from './auth/jwt-auth.guard'
+
 import { AddressModule } from './app/address/address.module'
+import { CarModule } from './app/car/car.module'
 import { ClassModule } from './app/class/class.module'
 import { DriverModule } from './app/driver/driver.module'
 import { RaceModule } from './app/race/race.module'
 import { TeamModule } from './app/team/team.module'
 import { RaceResultModule } from './app/race-result/race-result.module'
-import { UserModule } from './app/user/user.module'
-import { AuthModule } from './auth/auth.module'
-import { JwtAuthGuard } from './auth/jwt-auth.guard'
 
 @Module({
   imports: [
@@ -66,4 +69,10 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard'
     }
   ]
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LogsMiddleware)
+      .forRoutes('*')
+  }
+}

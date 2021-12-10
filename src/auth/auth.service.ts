@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 import { classToPlain } from 'class-transformer'
-import { UserService } from '../app/user/user.service'
+import { UserService } from '../user/user.service'
 
 @Injectable()
 export class AuthService {

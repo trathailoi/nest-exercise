@@ -18,6 +18,8 @@ async function bootstrap() {
       .setTitle('Mazi API')
       .setDescription('Mazi API\'s documentation')
       .setVersion(appConfig.getApiVersion())
+      .addTag('authen')
+      .addTag('users')
       .addTag('addresses')
       .addTag('classes')
       .addTag('teams')

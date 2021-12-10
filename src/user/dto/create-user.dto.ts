@@ -1,4 +1,4 @@
-export class CreateUserDto {
+export class CreateUserDto implements Readonly<CreateUserDto> {
   id: string
 
   email: string

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { Address } from './entities/address.entity'
+import { Address } from './address.entity'
 
 import { BaseService } from '../common/base.service'
 import { LoggerService } from '../../logger/custom.logger'

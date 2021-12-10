@@ -1,14 +1,16 @@
 import 'automapper-ts'
 import { Injectable } from '@nestjs/common'
-import { Address } from '../address/entities/address.entity'
+
+import { User } from '../../user/user.entity'
+import { CreateUserDto } from '../../user/dto/create-user.dto'
+
+import { Address } from '../address/address.entity'
 import { CreateAddressDto } from '../address/dto/create-address.dto'
 import { UpdateAddressDto } from '../address/dto/update-address.dto'
 
-import { User } from '../user/entities/user.entity'
-import { CreateUserDto } from '../user/dto/create-user.dto'
-
-// import { Class } from './class/entities/class.entity'
-// import { ClassModel } from './class/dto/class.dto'
+import { Class } from '../class/class.entity'
+import { CreateClassDto } from '../class/dto/create-class.dto'
+import { UpdateClassDto } from '../class/dto/update-class.dto'
 
 // import { Team } from './team/entities/team.entity'
 // import { TeamModel } from './team/dto/team.dto'
@@ -78,11 +80,16 @@ class Mapper {
       User,
       ['id', 'email', 'firstName', 'lastName', 'password']
     )
-    // this.createDefaultBiDiMap(
-    //     ClassModel,
-    //     Class,
-    //     ['id', 'name']
-    // )
+    this.createDefaultBiDiMap(
+      CreateClassDto,
+      Class,
+      ['id', 'name']
+    )
+    this.createDefaultBiDiMap(
+      UpdateClassDto,
+      Class,
+      ['id', 'name']
+    )
     // this.createDefaultBiDiMap(
     //     TeamModel,
     //     Team,
@@ -111,7 +118,8 @@ class Mapper {
   }
 
   public map(source: any, destination: any, value: any): any {
-    return automapper.map(source, destination, value)
+    const obj = automapper.map(source, destination, value)
+    return Object.keys(obj).reduce((tmpObj, key) => ({ ...tmpObj, ...(obj[key] !== undefined ? { [key]: obj[key] } : {}) }), {})
   }
 }
 

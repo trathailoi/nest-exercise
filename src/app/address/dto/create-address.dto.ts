@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Address } from '../entities/address.entity'
+import { Address } from '../address.entity'
 
 export class CreateAddressDto implements Readonly<CreateAddressDto> {
   @ApiProperty()

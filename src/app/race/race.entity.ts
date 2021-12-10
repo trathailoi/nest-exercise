@@ -1,8 +1,8 @@
 import {
   Column, Entity, PrimaryGeneratedColumn, OneToMany
 } from 'typeorm'
-import { RaceResult } from '../../race-result/entities/race-result.entity'
-import { BaseEntity } from '../../common/base.entity'
+import { RaceResult } from '../race-result/race-result.entity'
+import { BaseEntity } from '../common/base.entity'
 
 @Entity()
 export class Race extends BaseEntity {

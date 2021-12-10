@@ -1,6 +1,7 @@
 import {
-  PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, BaseEntity as SuperBaseEntity
+  PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, BaseEntity as SuperBaseEntity, ManyToOne
 } from 'typeorm'
+import { User } from '../../user/user.entity'
 
 export abstract class BaseEntity extends SuperBaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -12,28 +13,39 @@ export abstract class BaseEntity extends SuperBaseEntity {
   @Column({ type: 'boolean', default: false })
     isArchived?: boolean
 
-  // @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  // @Column({
+  //   type: 'timestamptz',
+  //   update: false,
+  //   default: () => 'CURRENT_TIMESTAMP'
+  // })
+  //   createdTime: Date
+
+  // @Column({
+  //   type: 'timestamptz',
+  //   default: () => 'CURRENT_TIMESTAMP',
+  //   onUpdate: 'now()'
+  // })
+  //   updatedTime: Date
+
   @CreateDateColumn({
     type: 'timestamptz',
-    default: 'now()',
-    nullable: true
+    default: 'now()' // default: () => 'CURRENT_TIMESTAMP'
+    // nullable: true
   })
     createdAt?: Date
 
-  // @Column({ type: 'varchar', length: 300 })
-  //   createdBy: string
-
-  // @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   @UpdateDateColumn({
     type: 'timestamptz',
-    default: 'now()',
-    nullable: true
+    default: 'now()' // default: () => 'CURRENT_TIMESTAMP'
+    // nullable: true
   })
     modifiedAt?: Date
 
-  // @Column({ type: 'varchar', length: 300 })
-  //   modifiedBy: string
+  @ManyToOne(() => User, (user) => user.id)
+    createdBy: User
 
-  // @Column({ type: 'varchar', length: 300, nullable: true })
-  //   internalComment: string
+  @ManyToOne(() => User, (user) => user.id, {
+    nullable: true
+  })
+    modifiedBy: User
 }

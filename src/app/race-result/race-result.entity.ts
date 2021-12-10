@@ -1,11 +1,11 @@
 import {
   Column, Entity, Unique, PrimaryGeneratedColumn, ManyToOne
 } from 'typeorm'
-import { BaseEntity } from '../../common/base.entity'
-import { Car } from '../../car/entities/car.entity'
-import { Race } from '../../race/entities/race.entity'
-import { Driver } from '../../driver/entities/driver.entity'
-import { Class } from '../../class/entities/class.entity'
+import { BaseEntity } from '../common/base.entity'
+import { Car } from '../car/car.entity'
+import { Race } from '../race/race.entity'
+import { Driver } from '../driver/driver.entity'
+import { Class } from '../class/class.entity'
 
 @Entity()
 @Unique('unique_result_index', ['car', 'race', 'driver'])

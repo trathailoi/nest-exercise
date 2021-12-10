@@ -1,10 +1,10 @@
 import {
   Column, Entity, PrimaryGeneratedColumn, ManyToOne, ManyToMany, JoinTable, OneToMany
 } from 'typeorm'
-import { BaseEntity } from '../../common/base.entity'
-import { Address } from '../../address/entities/address.entity'
-import { Driver } from '../../driver/entities/driver.entity'
-import { Car } from '../../car/entities/car.entity'
+import { BaseEntity } from '../common/base.entity'
+import { Address } from '../address/address.entity'
+import { Driver } from '../driver/driver.entity'
+import { Car } from '../car/car.entity'
 
 enum Nationality {
   USA = 'USA',
