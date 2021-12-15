@@ -4,8 +4,7 @@ import {
   Param, Body, HttpCode,
   ParseUUIDPipe,
   UsePipes,
-  HttpStatus, BadRequestException, NotFoundException, UploadedFile, UseInterceptors, Req, Version,
-  Inject
+  HttpStatus, BadRequestException, NotFoundException, UploadedFile, UseInterceptors, Req, Version
 } from '@nestjs/common'
 import {
   ApiTags, ApiBearerAuth,
@@ -16,7 +15,7 @@ import * as Joi from 'joi'
 import { diskStorage } from 'multer'
 import * as path from 'path'
 
-import type { Mapper } from '../common/mapper'
+import { Mapper } from '../common/mapper'
 import { JoiValidationPipe } from '../common/validation.pipe'
 
 import { ClassService } from './class.service'
@@ -37,7 +36,7 @@ import { Class } from './class.entity'
 })
 @Controller('classes')
 export class ClassController {
-  constructor(private readonly classService: ClassService, @Inject('MAPPER') private readonly mapper: Mapper) {}
+  constructor(private readonly classService: ClassService, private readonly mapper: Mapper) {}
 
   @Post()
   @ApiCreatedResponse()

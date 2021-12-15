@@ -5,15 +5,13 @@ import { ClassController } from './class.controller'
 import { Class } from './class.entity'
 
 import { Mapper } from '../common/mapper'
+
 @Module({
   imports: [TypeOrmModule.forFeature([Class])],
   controllers: [ClassController],
   providers: [
     ClassService,
-    {
-      provide: 'MAPPER',
-      useValue: new Mapper()
-    }
+    Mapper
   ]
 })
 export class ClassModule {}

@@ -1,5 +1,5 @@
 import {
-  Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, HttpCode, Inject, Req, HttpStatus
+  Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, HttpCode, Req, HttpStatus
 } from '@nestjs/common'
 import {
   ApiTags, ApiQuery, ApiBody, ApiBearerAuth,
@@ -12,7 +12,7 @@ import { CreateAddressDto } from './dto/create-address.dto'
 import { UpdateAddressDto } from './dto/update-address.dto'
 import { JoiValidationPipe } from '../common/validation.pipe'
 
-import type { Mapper } from '../common/mapper'
+import { Mapper } from '../common/mapper'
 
 @ApiTags('addresses')
 @ApiBearerAuth()
@@ -29,7 +29,7 @@ import type { Mapper } from '../common/mapper'
 export class AddressController {
   constructor(
     private readonly addressService: AddressService,
-    @Inject('MAPPER') private readonly mapper: Mapper
+    private readonly mapper: Mapper
   ) {}
 
   @Post()
