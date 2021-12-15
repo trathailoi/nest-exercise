@@ -58,23 +58,7 @@ export class AddressController {
   @ApiQuery({
     name: 'currentPage', required: false, schema: { minimum: 1 }, description: 'Current page.'
   })
-  @ApiOkResponse({
-    isArray: true,
-    schema: {
-      type: 'array',
-      items: {
-        properties: {
-          count: { type: 'number' },
-          data: {
-            type: 'array',
-            items: {
-              type: 'object'
-            }
-          }
-        }
-      }
-    }
-  })
+  @ApiOkResponse({ type: Address, isArray: true })
   findAll(@Query('pageSize') pageSize: number, @Query('currentPage') currentPage: number) {
     return this.addressService.findAll({
       pagination: {
@@ -86,7 +70,7 @@ export class AddressController {
 
   @Get(':id')
   @ApiNotFoundResponse()
-  @ApiOkResponse()
+  @ApiOkResponse({ type: Address })
   findOne(@Param('id') id: string) {
     return this.addressService.findOne(id)
   }

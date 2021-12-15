@@ -1,11 +1,12 @@
 import {
   Controller, Get, Post, Body, Patch, Param, Delete
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { TeamService } from './team.service'
 import { CreateTeamDto } from './dto/create-team.dto'
 import { UpdateTeamDto } from './dto/update-team.dto'
 import { MzSwaggerAuth } from '../common/decorator/swagger-auth.decorator'
+import { Team } from './team.entity'
 
 @ApiTags('teams')
 @MzSwaggerAuth()
@@ -24,6 +25,9 @@ export class TeamController {
   }
 
   @Get(':id')
+  @ApiOkResponse({
+    type: Team
+  })
   findOne(@Param('id') id: string) {
     return this.teamService.findOne(+id)
   }
