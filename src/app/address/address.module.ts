@@ -11,10 +11,7 @@ import { Mapper } from '../common/mapper'
   controllers: [AddressController],
   providers: [
     AddressService,
-    {
-      provide: 'MAPPER',
-      useValue: new Mapper()
-    }
+    Mapper
   ]
 })
 export class AddressModule {}

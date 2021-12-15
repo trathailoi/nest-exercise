@@ -1,9 +1,9 @@
 import {
-  Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, HttpCode, Inject, Req, HttpStatus
+  Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, HttpCode, Req, HttpStatus
 } from '@nestjs/common'
 import {
-  ApiTags, ApiQuery, ApiBody, ApiBearerAuth,
-  ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse, ApiUnauthorizedResponse
+  ApiTags, ApiQuery,
+  ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse
 } from '@nestjs/swagger'
 import * as Joi from 'joi'
 import { Address } from './address.entity'
@@ -12,24 +12,16 @@ import { CreateAddressDto } from './dto/create-address.dto'
 import { UpdateAddressDto } from './dto/update-address.dto'
 import { JoiValidationPipe } from '../common/validation.pipe'
 
-import type { Mapper } from '../common/mapper'
+import { Mapper } from '../common/mapper'
+import { MzSwaggerAuth } from '../common/decorator/swagger-auth.decorator'
 
 @ApiTags('addresses')
-@ApiBearerAuth()
-@ApiUnauthorizedResponse({
-  schema: {
-    type: 'object',
-    properties: {
-      statusCode: { type: 'number', example: 401 },
-      message: { type: 'string', example: 'Unauthorized' }
-    }
-  }
-})
+@MzSwaggerAuth()
 @Controller('addresses')
 export class AddressController {
   constructor(
     private readonly addressService: AddressService,
-    @Inject('MAPPER') private readonly mapper: Mapper
+    private readonly mapper: Mapper
   ) {}
 
   @Post()
@@ -66,23 +58,7 @@ export class AddressController {
   @ApiQuery({
     name: 'currentPage', required: false, schema: { minimum: 1 }, description: 'Current page.'
   })
-  @ApiOkResponse({
-    isArray: true,
-    schema: {
-      type: 'array',
-      items: {
-        properties: {
-          count: { type: 'number' },
-          data: {
-            type: 'array',
-            items: {
-              type: 'object'
-            }
-          }
-        }
-      }
-    }
-  })
+  @ApiOkResponse({ type: Address, isArray: true })
   findAll(@Query('pageSize') pageSize: number, @Query('currentPage') currentPage: number) {
     return this.addressService.findAll({
       pagination: {
@@ -94,7 +70,7 @@ export class AddressController {
 
   @Get(':id')
   @ApiNotFoundResponse()
-  @ApiOkResponse()
+  @ApiOkResponse({ type: Address })
   findOne(@Param('id') id: string) {
     return this.addressService.findOne(id)
   }
@@ -114,20 +90,6 @@ export class AddressController {
       country: Joi.string()
     })
   }))
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        name: { type: 'string', example: 'John Doe' },
-        street: { type: 'string', example: '123 Main St.' },
-        street2: { type: 'string', example: 'Apt. 1' },
-        city: { type: 'string', example: 'Anytown' },
-        state: { type: 'string', example: 'CA' },
-        zip: { type: 'string', example: '12345' },
-        country: { type: 'string', example: 'USA' }
-      }
-    }
-  })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiNoContentResponse()

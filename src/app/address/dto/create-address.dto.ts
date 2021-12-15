@@ -7,10 +7,10 @@ export class CreateAddressDto implements Readonly<CreateAddressDto> {
   @ApiProperty({ example: 'John Doe' })
     name: string
 
-  @ApiProperty({ example: '123 Main St' })
+  @ApiProperty({ required: false, example: '123 Main St' })
     street: string
 
-  @ApiProperty({ example: 'Apt. 1' })
+  @ApiProperty({ required: false, example: 'Apt. 1' })
     street2: string
 
   @ApiProperty({ example: 'Anytown' })

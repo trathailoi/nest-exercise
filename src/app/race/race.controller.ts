@@ -2,11 +2,13 @@ import {
   Controller, Get, Post, Body, Patch, Param, Delete
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
+import { MzSwaggerAuth } from '../common/decorator/swagger-auth.decorator'
 import { RaceService } from './race.service'
 import { CreateRaceDto } from './dto/create-race.dto'
 import { UpdateRaceDto } from './dto/update-race.dto'
 
 @ApiTags('races')
+@MzSwaggerAuth()
 @Controller('races')
 export class RaceController {
   constructor(private readonly raceService: RaceService) {}

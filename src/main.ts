@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { NestFactory } from '@nestjs/core'
 import { VersioningType } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
@@ -6,8 +7,8 @@ import { appConfig } from './app.config'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  app.setGlobalPrefix('api') // https://example.com/api/...
-  app.enableVersioning({ // https://example.com/api/v1/route or https://example.com/api/v2/route.
+  app.setGlobalPrefix('api') // http://localhost:3000/api/...
+  app.enableVersioning({ // http://localhost:3000/api/v1.0/...
     type: VersioningType.URI,
     defaultVersion: appConfig.getApiVersion()
   })

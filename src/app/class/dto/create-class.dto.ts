@@ -3,6 +3,6 @@ import { ApiProperty } from '@nestjs/swagger'
 export class CreateClassDto {
   id: string
 
-  @ApiProperty()
+  @ApiProperty({ example: 'GTE PRO' })
     name: string
 }

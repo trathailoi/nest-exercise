@@ -24,7 +24,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/comma-dangle': ['error', 'never'],
     '@typescript-eslint/semi': ['error', 'never'],
-    'class-methods-use-this': [1, { "enforceForClassFields": true }],
+    'class-methods-use-this': 'off',
     'import/prefer-default-export': 'off',
     'no-restricted-syntax': 'off',
     'linebreak-style': 'off',
