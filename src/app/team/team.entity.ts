@@ -42,6 +42,7 @@ export class Team extends BaseEntity {
   })
     businessAddress?: Address
 
+  @ApiProperty({ type: () => Driver, isArray: true })
   @ManyToMany(() => Driver, (driver) => driver.teams, {
     cascade: true
   })
