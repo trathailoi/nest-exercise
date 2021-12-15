@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common'
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger'
 
-export function SwaggerAuth() {
+export function MzSwaggerAuth() {
   return applyDecorators(
     ApiBearerAuth(),
     ApiUnauthorizedResponse({

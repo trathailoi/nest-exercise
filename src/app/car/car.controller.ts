@@ -8,13 +8,13 @@ import {
   Delete
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { SwaggerAuth } from '../common/decorator/swagger-auth.decorator'
+import { MzSwaggerAuth } from '../common/decorator/swagger-auth.decorator'
 import { CarService } from './car.service'
 import { CreateCarDto } from './dto/create-car.dto'
 import { UpdateCarDto } from './dto/update-car.dto'
 
 @ApiTags('cars')
-@SwaggerAuth()
+@MzSwaggerAuth()
 @Controller('cars')
 export class CarController {
   constructor(private readonly carService: CarService) {}

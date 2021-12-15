@@ -6,7 +6,7 @@ import { ApiOkResponse, ApiTags, ApiBody } from '@nestjs/swagger'
 import { AppService } from './app.service'
 import { AuthService } from './auth/auth.service'
 import { LocalAuthGuard } from './auth/local-auth.guard'
-import { Public } from './app/common/decorator/public.decorator'
+import { MzPublic } from './app/common/decorator/public.decorator'
 import { JoiValidationPipe } from './app/common/validation.pipe'
 
 @Controller()
@@ -50,7 +50,7 @@ export class AppController {
   }))
   // eslint-disable-next-line class-methods-use-this
   @UseGuards(LocalAuthGuard)
-  @Public()
+  @MzPublic()
   @HttpCode(HttpStatus.OK)
   async login(@Request() req) {
     return this.authService.login(req.user)

@@ -2,7 +2,7 @@ import {
   Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, HttpCode, Req, HttpStatus
 } from '@nestjs/common'
 import {
-  ApiTags, ApiQuery, ApiBody,
+  ApiTags, ApiQuery,
   ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse
 } from '@nestjs/swagger'
 import * as Joi from 'joi'
@@ -13,10 +13,10 @@ import { UpdateAddressDto } from './dto/update-address.dto'
 import { JoiValidationPipe } from '../common/validation.pipe'
 
 import { Mapper } from '../common/mapper'
-import { SwaggerAuth } from '../common/decorator/swagger-auth.decorator'
+import { MzSwaggerAuth } from '../common/decorator/swagger-auth.decorator'
 
 @ApiTags('addresses')
-@SwaggerAuth()
+@MzSwaggerAuth()
 @Controller('addresses')
 export class AddressController {
   constructor(
@@ -106,20 +106,6 @@ export class AddressController {
       country: Joi.string()
     })
   }))
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        name: { type: 'string', example: 'John Doe' },
-        street: { type: 'string', example: '123 Main St.' },
-        street2: { type: 'string', example: 'Apt. 1' },
-        city: { type: 'string', example: 'Anytown' },
-        state: { type: 'string', example: 'CA' },
-        zip: { type: 'string', example: '12345' },
-        country: { type: 'string', example: 'USA' }
-      }
-    }
-  })
   @ApiBadRequestResponse()
   @ApiNotFoundResponse()
   @ApiNoContentResponse()

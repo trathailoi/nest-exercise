@@ -6,7 +6,7 @@ import {
 } from '@nestjs/swagger'
 import * as Joi from 'joi'
 import { Mapper } from '../app/common/mapper'
-import { Public } from '../app/common/decorator/public.decorator'
+import { MzPublic } from '../app/common/decorator/public.decorator'
 import { JoiValidationPipe } from '../app/common/validation.pipe'
 import { CreateUserDto } from './dto/create-user.dto'
 import { User } from './user.entity'
@@ -34,7 +34,7 @@ export class UserController {
     }
   })
   @ApiCreatedResponse({})
-  @Public()
+  @MzPublic()
   @UsePipes(new JoiValidationPipe({
     body: Joi.object({
       email: Joi.string().email().required(),

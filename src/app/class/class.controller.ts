@@ -16,7 +16,7 @@ import * as path from 'path'
 
 import { Mapper } from '../common/mapper'
 import { JoiValidationPipe } from '../common/validation.pipe'
-import { SwaggerAuth } from '../common/decorator/swagger-auth.decorator'
+import { MzSwaggerAuth } from '../common/decorator/swagger-auth.decorator'
 
 import { ClassService } from './class.service'
 import { CreateClassDto } from './dto/create-class.dto'
@@ -24,7 +24,7 @@ import { UpdateClassDto } from './dto/update-class.dto'
 import { Class } from './class.entity'
 
 @ApiTags('classes')
-@SwaggerAuth()
+@MzSwaggerAuth()
 @Controller('classes')
 export class ClassController {
   constructor(private readonly classService: ClassService, private readonly mapper: Mapper) {}

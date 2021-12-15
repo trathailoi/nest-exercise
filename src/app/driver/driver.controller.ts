@@ -2,13 +2,13 @@ import {
   Controller, Get, Post, Body, Patch, Param, Delete
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { SwaggerAuth } from '../common/decorator/swagger-auth.decorator'
+import { MzSwaggerAuth } from '../common/decorator/swagger-auth.decorator'
 import { DriverService } from './driver.service'
 import { CreateDriverDto } from './dto/create-driver.dto'
 import { UpdateDriverDto } from './dto/update-driver.dto'
 
 @ApiTags('drivers')
-@SwaggerAuth()
+@MzSwaggerAuth()
 @Controller('drivers')
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
