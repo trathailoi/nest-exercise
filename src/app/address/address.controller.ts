@@ -2,8 +2,8 @@ import {
   Controller, Get, Post, Body, Patch, Param, Delete, Query, UsePipes, HttpCode, Req, HttpStatus
 } from '@nestjs/common'
 import {
-  ApiTags, ApiQuery, ApiBody, ApiBearerAuth,
-  ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse, ApiUnauthorizedResponse
+  ApiTags, ApiQuery, ApiBody,
+  ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse
 } from '@nestjs/swagger'
 import * as Joi from 'joi'
 import { Address } from './address.entity'
@@ -13,18 +13,10 @@ import { UpdateAddressDto } from './dto/update-address.dto'
 import { JoiValidationPipe } from '../common/validation.pipe'
 
 import { Mapper } from '../common/mapper'
+import { SwaggerAuth } from '../common/decorator/swagger-auth.decorator'
 
 @ApiTags('addresses')
-@ApiBearerAuth()
-@ApiUnauthorizedResponse({
-  schema: {
-    type: 'object',
-    properties: {
-      statusCode: { type: 'number', example: 401 },
-      message: { type: 'string', example: 'Unauthorized' }
-    }
-  }
-})
+@SwaggerAuth()
 @Controller('addresses')
 export class AddressController {
   constructor(

@@ -7,8 +7,7 @@ import {
   HttpStatus, BadRequestException, NotFoundException, UploadedFile, UseInterceptors, Req, Version
 } from '@nestjs/common'
 import {
-  ApiTags, ApiBearerAuth,
-  ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse, ApiUnauthorizedResponse
+  ApiTags, ApiOkResponse, ApiNoContentResponse, ApiCreatedResponse, ApiBadRequestResponse, ApiNotFoundResponse
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 import * as Joi from 'joi'
@@ -17,6 +16,7 @@ import * as path from 'path'
 
 import { Mapper } from '../common/mapper'
 import { JoiValidationPipe } from '../common/validation.pipe'
+import { SwaggerAuth } from '../common/decorator/swagger-auth.decorator'
 
 import { ClassService } from './class.service'
 import { CreateClassDto } from './dto/create-class.dto'
@@ -24,16 +24,7 @@ import { UpdateClassDto } from './dto/update-class.dto'
 import { Class } from './class.entity'
 
 @ApiTags('classes')
-@ApiBearerAuth()
-@ApiUnauthorizedResponse({
-  schema: {
-    type: 'object',
-    properties: {
-      statusCode: { type: 'number', example: 401 },
-      message: { type: 'string', example: 'Unauthorized' }
-    }
-  }
-})
+@SwaggerAuth()
 @Controller('classes')
 export class ClassController {
   constructor(private readonly classService: ClassService, private readonly mapper: Mapper) {}

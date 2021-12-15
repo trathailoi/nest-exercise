@@ -5,8 +5,10 @@ import { ApiTags } from '@nestjs/swagger'
 import { TeamService } from './team.service'
 import { CreateTeamDto } from './dto/create-team.dto'
 import { UpdateTeamDto } from './dto/update-team.dto'
+import { SwaggerAuth } from '../common/decorator/swagger-auth.decorator'
 
 @ApiTags('teams')
+@SwaggerAuth()
 @Controller('teams')
 export class TeamController {
   constructor(private readonly teamService: TeamService) {}
